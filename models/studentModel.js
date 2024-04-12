@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import validator from "validator";
 
 const studentSchema = new mongoose.Schema({
     name: {
@@ -13,10 +14,19 @@ const studentSchema = new mongoose.Schema({
         default: 'JSS_1'
     },
     
-    assignedSubjects: [{
-        type: String,
-    }]
+    assignedSubjects: {
+        type: [{
+            type: String
+        }],
+        validate: {
+            validator: function(val){
+                return val.length > 4
+            },
+            message: "Please assign at least four subject to student"
+        }
+    }
 })
+
 
 const Student = mongoose.model('Student', studentSchema)
 

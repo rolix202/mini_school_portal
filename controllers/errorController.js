@@ -10,10 +10,19 @@ const devError = (res, error ) => {
     
 }
 
+// const duplicateValueError = (err) => {
+//     const name = err.keyValue.name;
+//     console.log(name);
+//     return new CustomError("Email already used! Please try another one.", 400)
+// }
+
 const duplicateValueError = (err) => {
-    // const email = err.keyValue.email;
-    return new CustomError("Email already used! Please try another one.", 400)
-}
+    let errorMessage = '';
+    for (const key in err.keyValue) {
+        errorMessage += `${key} already exists\n`;
+    }
+    return new CustomError(errorMessage.trim(), 400);
+};
 
 const validationErrorHandler = (err) => {
     const errors = Object.values(err.errors).map(val => val.message);
