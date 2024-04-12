@@ -10,6 +10,7 @@ import Register from "./pages/Register.jsx";
 import Error from "./pages/Error.jsx";
 import { action as registerAction } from "./pages/Register.jsx";
 import { action as loginAction } from "./pages/Login.jsx";
+import { action as dashboardAction } from "./pages/dashboard/DashboardLayout.jsx";
 import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
 import DashHome from "./pages/dashboard/DashHome.jsx";
 import Students from "./pages/dashboard/Students.jsx";
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
   {
     path: "dashboard",
     element: <DashboardLayout />,
+    action: dashboardAction,
     children: [
       {
         index: true,

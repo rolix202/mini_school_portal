@@ -6,6 +6,7 @@ import morgan from "morgan";
 // Custom imports
 import authRoute from "./routes/authRoute.js"
 import staffRoute from "./routes/staffRoute.js"
+import studentRoute from "./routes/studentRoute.js"
 import CustomError from "./utils/customError.js";
 import globalErrorHandler from "./controllers/errorController.js"
 import { protect } from "./controllers/authController.js";
@@ -21,6 +22,7 @@ app.set('view engine', 'ejs')
 
 app.use('/api/v1/auth', authRoute)
 app.use('/api/v1/staff', protect, staffRoute)
+app.use('/api/v1/student', studentRoute)
 
 
 // NOT FOUND ROUTE

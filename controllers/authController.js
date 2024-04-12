@@ -11,10 +11,10 @@ const jwtSignToken = (id) => {
     })
 }
 
-const options = {
-    maxAge: process.env.JWT_SECRET_EXP,
-    httpOnly: true,
-}
+// const options = {
+//     maxAge: process.env.JWT_SECRET_EXP,
+//     httpOnly: true,
+// }
 
 export const signup = asyncErrorHandler(async (req, res, next) => {
 
@@ -24,11 +24,24 @@ export const signup = asyncErrorHandler(async (req, res, next) => {
 
     const token = jwtSignToken(staff._id);
 
-    if (process.env.NODE_ENV === 'production'){
-        options.secure = true
+    // if (process.env.NODE_ENV === 'production'){
+    //     options.secure = true
+    // }
+
+    // res.cookie('jwt', token, options)
+
+
+    const options = {
+        maxAge: process.env.JWT_SECRET_EXP,
+        httpOnly: true
     }
 
-    res.cookie('jwt', token, options)
+    if(process.env.NODE_ENV === 'production'){
+        options.secure = true;
+    }
+
+    res.cookie('jwt', token, options);
+
 
     res.status(201).json({
         status: 'success',
@@ -56,15 +69,25 @@ export const login = asyncErrorHandler(async (req, res,next) => {
 
     const token = jwtSignToken(staff._id);
 
-    if (process.env.NODE_ENV === 'production')
+    const options = {
+        maxAge: process.env.JWT_SECRET_EXP,
+        httpOnly: true
+    }
 
-    res.cookie('jwt', token, options)
+    if(process.env.NODE_ENV === 'production'){
+        options.secure = true;
+    }
+
+    res.cookie('jwt', token, options);
 
     staff.password = undefined;
 
     res.status(200).json({
         status: 'success',
-        message: 'Logged in Successfully..!'
+        message: 'Logged in Successfully..!',
+        data: {
+            staff
+        }
     })
    
 }) 

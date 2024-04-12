@@ -20,11 +20,16 @@ const staffSchema = new mongoose.Schema({
         lowercase: true,
         validate: [validator.isEmail, 'Please enter a valid email address']
     },
-    class: {
+    subject: {
         type: String,
-        enum: ['JSS_1', 'JSS_2', 'JSS_3', 'SS_1', 'SS_2', 'SS_3'],
-        default: 'JSS_1'
+        enum: ['English', 'Mathematics', 'Biology', 'Civic Education', 'Data Processing', 'Government', 'C.R.K', 'Economics', 'Commerce'],
+        default: 'English'
     },
+    // class: {
+    //     type: String,
+    //     enum: ['JSS_1', 'JSS_2', 'JSS_3', 'SS_1', 'SS_2', 'SS_3'],
+    //     default: 'JSS_1'
+    // },
     password: {
         type: String,
         required: [true, 'Password is required'],
@@ -44,8 +49,8 @@ const staffSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'],
-        default: 'user'
+        enum: ['admin', 'subject_teacher', 'class_teacher'],
+        default: 'subject_teacher'
     },
     passwordChangedAt: Date,
 });
