@@ -37,7 +37,7 @@ export default function Home() {
               >
                 Log In
               </Link>
-              <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+              <a href="/register" className="text-sm font-semibold leading-6 text-gray-900">
                 Register <span aria-hidden="true">→</span>
               </a>
             </div>

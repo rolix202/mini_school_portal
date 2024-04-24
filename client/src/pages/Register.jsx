@@ -25,16 +25,6 @@ export const action = async ({ request }) => {
 
 const Register = () => {
 
-  // const {formData, setFormData} = useState({
-  //     fullName: '',
-  //     phoneNo: '',
-  //     email: '',
-  //     class: '',
-  //     password: '',
-  //     confirmPass: ''
-
-  // })
-
   return (
     <div className="wrapper">
       <div className="relative isolate px-6 pt-32 lg:px-8">
@@ -123,15 +113,17 @@ const Register = () => {
                     <select
                       id="subject"
                       name="subject"
+                      required
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                     >
+                      <option value="">Select an area</option>
                       <option>English</option>
                       <option>Mathematics</option>
                       <option>Biology</option>
                       <option>Civic Education</option>
                       <option>Data Processing</option>
                       <option>Government</option>
-                      <option>C. R. K</option>
+                      <option>C.R.K</option>
                       <option>Economics</option>
                       <option>Commerce</option>
                     </select>

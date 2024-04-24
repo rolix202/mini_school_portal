@@ -10,11 +10,15 @@ import Register from "./pages/Register.jsx";
 import Error from "./pages/Error.jsx";
 import { action as registerAction } from "./pages/Register.jsx";
 import { action as loginAction } from "./pages/Login.jsx";
-import { action as dashboardAction } from "./pages/dashboard/DashboardLayout.jsx";
+import { loader as dashboardLoader } from "./pages/dashboard/DashboardLayout.jsx";
+import { loader as studentsLoader } from "./pages/dashboard/Students.jsx";
+import { loader as homeLoader } from "./pages/dashboard/DashHome.jsx";
 import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
 import DashHome from "./pages/dashboard/DashHome.jsx";
 import Students from "./pages/dashboard/Students.jsx";
 import AddStudent from "./pages/dashboard/AddStudent.jsx";
+import LogOut from "./pages/dashboard/LogOut.jsx";
+import Staffs from "./pages/dashboard/Staffs.jsx";
 
 const router = createBrowserRouter([
   {
@@ -54,15 +58,21 @@ const router = createBrowserRouter([
   {
     path: "dashboard",
     element: <DashboardLayout />,
-    action: dashboardAction,
+    loader: dashboardLoader,
     children: [
       {
         index: true,
-        element: <DashHome />
+        element: <DashHome />,
+        loader: homeLoader,
+      },
+      {
+        path: "staffs",
+        element: <Staffs />
       },
       {
         path: "students",
-        element: <Students />
+        element: <Students />,
+        loader: studentsLoader
       },
       {
         path: "add-student",
@@ -70,7 +80,13 @@ const router = createBrowserRouter([
       }
 
     ]
-  }
+  },
+
+  {
+    path: "logout",
+    element: <LogOut />
+  },
+
 ])
 
 export default function App() {

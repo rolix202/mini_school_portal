@@ -10,8 +10,14 @@ const studentSchema = new mongoose.Schema({
     },
     class: {
         type: String,
-        enum: ['JSS_1', 'JSS_2', 'JSS_3', 'SS_1', 'SS_2', 'SS_3'],
-        default: 'JSS_1'
+        required: [true, 'Choose student class'],
+        enum: ['JSS_1 Platinum', 'JSS_2', 'JSS_3', 'SS_1', 'SS_2 Galaxy', 'SS_3']
+    },
+
+    subjectArea: {
+        type: String,
+        required: [true, 'Select student subject Area'],
+        enum: ['Sciences', 'Arts']
     },
     
     assignedSubjects: {
@@ -22,7 +28,7 @@ const studentSchema = new mongoose.Schema({
             validator: function(val){
                 return val.length > 4
             },
-            message: "Please assign at least four subject to student"
+            message: "Please assign at least five subject and above"
         }
     }
 })

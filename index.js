@@ -3,26 +3,37 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 
 
+
+
 // Custom imports
 import authRoute from "./routes/authRoute.js"
 import staffRoute from "./routes/staffRoute.js"
 import studentRoute from "./routes/studentRoute.js"
 import CustomError from "./utils/customError.js";
 import globalErrorHandler from "./controllers/errorController.js"
-import { protect } from "./controllers/authController.js";
+import { authenticateStaff } from "./middleware/authMiddleware.js";
+// import { protect } from "./controllers/authController.js";
+import cookieParser from "cookie-parser";
+
 
 
 const app = express()
 
-app.use(morgan('dev'));
+
+// if (process.env.NODE_ENV === 'development'){
+    app.use(morgan('dev'));
+// }
+
+app.use(cookieParser())
 // app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json());
 app.set('view engine', 'ejs')
 
 
+
 app.use('/api/v1/auth', authRoute)
-app.use('/api/v1/staff', protect, staffRoute)
-app.use('/api/v1/student', studentRoute)
+app.use('/api/v1/staff', authenticateStaff, staffRoute)
+app.use('/api/v1/student', authenticateStaff, studentRoute)
 
 
 // NOT FOUND ROUTE

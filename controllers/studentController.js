@@ -20,30 +20,66 @@ export const addStudent = asyncErrorHandler(async (req, res, next) => {
 }) 
 
 export const getAllStudent = asyncErrorHandler(async (req, res, next) => {
-    const student = await Student.find()
 
-    if (student === 0){
-        const error = new CustomError("No student found", 404)
+    const { assignedClass } = req.staff
+
+    const students = await Student.find({class: assignedClass})
+
+    // if (students.length === 0){
+    //     const error = new CustomError("No student found", 404)
+    //     return next(error)
+    // }
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            students
+        }   
+    })
+}) 
+
+export const getStudent = asyncErrorHandler(async (req, res, next) => {
+    const student = await Student.findById(req.params.id)
+    
+    if(!student){
+        const error = new CustomError("Student with the ID is not found", 404)
         return next(error)
     }
 
     res.status(200).json({
         status: 'success',
-        No_of_Students: student.length,
         data: {
             student
-        }   
+        }
+    })
+    
+}) 
+
+export const updateStudent = asyncErrorHandler(async (req, res, next) => {
+    const updatedStudent = await Student.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
+
+    if(!updatedStudent){
+        const error = new CustomError("Student with the ID not found", 404)
+        return next(error)
+    }
+    
+    res.status(200).json({
+        status: "success",
+        data: {
+            updatedStudent
+        }
     })
 }) 
 
-export const getStudent = (req, res, next) => {
+export const deleteStudent = asyncErrorHandler(async (req, res, next) => {
+    const deletedStudent = await Student.findByIdAndDelete(req.params.id)
 
-}
-
-export const updateStudent = (req, res, next) => {
-
-}
-
-export const deleteStudent = (req, res, next) => {
-
-}
+    if(!deletedStudent){
+        const error = new CustomError("Student with the ID not found", 404)
+        return next(error)
+    }
+    res.status(200).json({
+        status: 'success',
+        data: null
+    })
+}) 

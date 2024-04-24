@@ -4,17 +4,18 @@ import jwt from "jsonwebtoken";
 import Staff from "../models/userModel.js"
 import asyncErrorHandler from "../utils/asyncErrorHandler.js"
 import CustomError from "../utils/customError.js";
+import { createJWT } from "../utils/tokenUtil.js";
 
-const jwtSignToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_SECRET_EXP
-    })
+
+const oneDay = 1000 * 60*60*24;
+
+const options = {
+    httpOnly: true,
+    expires: new Date(Date.now() + oneDay),
+    secure: process.env.NODE_ENV === 'production'
 }
 
-// const options = {
-//     maxAge: process.env.JWT_SECRET_EXP,
-//     httpOnly: true,
-// }
+
 
 export const signup = asyncErrorHandler(async (req, res, next) => {
 
@@ -22,31 +23,13 @@ export const signup = asyncErrorHandler(async (req, res, next) => {
 
     staff.password = undefined;
 
-    const token = jwtSignToken(staff._id);
+    const token = createJWT({staffId: staff._id, role: staff.role, assignedClass: staff.class});
 
-    // if (process.env.NODE_ENV === 'production'){
-    //     options.secure = true
-    // }
-
-    // res.cookie('jwt', token, options)
-
-
-    const options = {
-        maxAge: process.env.JWT_SECRET_EXP,
-        httpOnly: true
-    }
-
-    if(process.env.NODE_ENV === 'production'){
-        options.secure = true;
-    }
-
-    res.cookie('jwt', token, options);
-
+    res.cookie('token', token, options)
 
     res.status(201).json({
         status: 'success',
-        length: staff.length,
-        message: 'Staff created successfully',
+        message: 'Successfully registered'
     })
 
 }) 
@@ -67,62 +50,29 @@ export const login = asyncErrorHandler(async (req, res,next) => {
         return next(error)
     }
 
-    const token = jwtSignToken(staff._id);
+    console.log("Class is: ", staff.class);
 
-    const options = {
-        maxAge: process.env.JWT_SECRET_EXP,
-        httpOnly: true
-    }
+    const token = createJWT({staffId: staff._id, role: staff.role, assignedClass: staff.class, subject: staff.subject})
 
-    if(process.env.NODE_ENV === 'production'){
-        options.secure = true;
-    }
-
-    res.cookie('jwt', token, options);
+    res.cookie('token', token, options)
 
     staff.password = undefined;
 
     res.status(200).json({
         status: 'success',
-        message: 'Logged in Successfully..!',
-        data: {
-            staff
-        }
+        message: 'Log in Successful',
+        token
     })
    
 }) 
 
-export const protect = asyncErrorHandler(async (req, res, next) => {
-    let reqToken = req.headers.authorization;
-
-    let token;
-
-    if (reqToken && reqToken.startsWith("Bearer")){
-        token = reqToken.split(' ')[1];
-    }
-
-    if(!token){
-        const error = new CustomError('You are not logged In!', 401);
-
-        return next(error)
-    }
-
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
-
-    const staff = await Staff.findById(decodedToken.id)
-
-    if(!staff){
-        const error = new CustomError('Staff with given token does not exist', 401)
-        return next(error)
-    }
-
-    const isPasswordChanged = await staff.isPasswordChangedAt(decodedToken.iat)
-
-    if(isPasswordChanged){
-        const error = new CustomError("Password has been changed recently! Please log in again", 401)
-        return next(error)
-    }
-
-    req.staff = staff;
-    next()
-}) 
+export const logout = (req, res) => {
+    res.cookie('token', 'logout', {
+        httpOnly:true,
+        expires: new Date(Date.now()),
+    });
+    res.status(200).json({
+        status: 'success',
+        message: 'Logged Out Successfully'
+    })
+}

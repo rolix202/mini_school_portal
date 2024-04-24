@@ -40,6 +40,11 @@ const jwtTokenExpiredError = (err) => {
 }
 
 
+const castErrorHandler = (err) => {
+    const msg = `Invalid value for ${err.path}: ${err.value}!`
+    return new CustomError(msg, 400);
+}
+
 const prodError = (res, error) => {
     if(error.isOperational){
         res.status(error.statusCode).json({
@@ -73,6 +78,8 @@ export default (error, req, res, next) => {
         if(error.name === "JsonWebTokenError") error = invalidTokenError(error);
 
         if(error.name === "TokenExpiredError") error = jwtTokenExpiredError(error);
+
+        if(error.name === "CastError") error = castErrorHandler(error)
 
         prodError(res, error);
     }

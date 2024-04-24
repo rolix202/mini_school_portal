@@ -10,8 +10,10 @@ import './index.css'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <>
     <App />
     <ToastContainer position='top-center'/>
-  </React.StrictMode>,
+  </>
+  // </React.StrictMode>,
 )
