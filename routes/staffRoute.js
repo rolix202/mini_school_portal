@@ -1,14 +1,18 @@
 import express from "express";
 
 // Custom imports
-import { getAllStaffs, getCurrentUser } from "../controllers/staffController.js";
+import { deleteStaff, getAllStaffs, getStaff, updateStaff } from "../controllers/staffController.js";
 import { authorize } from "../middleware/authMiddleware.js";
 
 const router = express.Router()
 
 router.route('/')
     .get(authorize('admin'), getAllStaffs)
-    router.route('/current-user')
-    .get(getCurrentUser)
+
+router.route('/:id')
+    .get(getStaff)
+    .patch(authorize('admin'), updateStaff)
+    .delete(authorize('admin'), deleteStaff)    
+
 
 export default router;

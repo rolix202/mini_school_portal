@@ -10,4 +10,8 @@ export default {
   plugins: [
     require('@tailwindcss/forms'),
   ],
+  variants: {
+    
+     tableLayout: ['responsive', 'hover', 'focus'],
+  }
 }

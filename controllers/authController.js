@@ -15,15 +15,13 @@ const options = {
     secure: process.env.NODE_ENV === 'production'
 }
 
-
-
 export const signup = asyncErrorHandler(async (req, res, next) => {
 
     const staff = await Staff.create(req.body)
 
     staff.password = undefined;
 
-    const token = createJWT({staffId: staff._id, role: staff.role, assignedClass: staff.class});
+    const token = createJWT({staffId: staff._id, role: staff.role, assignedClass: staff.class, subject: staff.subject})
 
     res.cookie('token', token, options)
 
@@ -50,8 +48,6 @@ export const login = asyncErrorHandler(async (req, res,next) => {
         return next(error)
     }
 
-    console.log("Class is: ", staff.class);
-
     const token = createJWT({staffId: staff._id, role: staff.role, assignedClass: staff.class, subject: staff.subject})
 
     res.cookie('token', token, options)
@@ -65,6 +61,7 @@ export const login = asyncErrorHandler(async (req, res,next) => {
     })
    
 }) 
+
 
 export const logout = (req, res) => {
     res.cookie('token', 'logout', {

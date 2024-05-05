@@ -24,9 +24,9 @@ const staffSchema = new mongoose.Schema({
         type: String,
         enum: ['English', 'Mathematics', 'Biology', 'Civic Education', 'Data Processing', 'Government', 'C.R.K', 'Economics', 'Commerce'],
     },
-    class: {
+    staffClass: {
         type: String,
-        enum: ['JSS_1 Platinum', 'JSS_2', 'JSS_3', 'SS_1', 'SS_2 Galaxy', 'SS_3']
+        enum: ['JSS_1 Platinum', 'JSS_1 Rose', 'JSS_1 Galaxy', 'JSS_2 Rose', 'JSS_2 Galaxy', 'JSS_3 Rose', 'JSS_3 Galaxy', 'SS_1 Platinum', 'SS_1 Galaxy', 'SS_2 Galaxy', 'SS_2 Platinum', 'SS_3 Galaxy', 'SS_3 Platinum']
     },
     password: {
         type: String,

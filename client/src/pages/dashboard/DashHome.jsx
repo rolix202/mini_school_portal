@@ -3,6 +3,7 @@ import customFetch from "../../../utils/customFetch";
 import handleServerError from "../../../utils/handleServerError";
 import { useLoaderData, useOutletContext } from "react-router-dom";
 import svgImg from "../../assets/educator.svg";
+import { useDashboardContext } from "./DashboardLayout";
 
 export const loader = async () => {
   try {
@@ -16,13 +17,12 @@ export const loader = async () => {
 };
 
 const DashHome = () => {
-  const {currentUser} = useOutletContext()
+ const { currentUser } = useDashboardContext()
+ const currentUserClass = currentUser?.data?.currentUser.staffClass; 
 
+  // console.log(currentUserData);
   const { data } = useLoaderData();
-  // console.log(props.currentUser);
-  
   const { students } = data;
-  
 
   return (
     <div>
@@ -50,7 +50,7 @@ const DashHome = () => {
 
                     <div className="pt-8">
                       <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                        {currentUser.class}
+                        {currentUserClass}
                       </span>
                     </div>
                   </div>

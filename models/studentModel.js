@@ -11,7 +11,7 @@ const studentSchema = new mongoose.Schema({
     class: {
         type: String,
         required: [true, 'Choose student class'],
-        enum: ['JSS_1 Platinum', 'JSS_2', 'JSS_3', 'SS_1', 'SS_2 Galaxy', 'SS_3']
+        enum: ['JSS_1 Platinum', 'JSS_2 Galaxy', 'JSS_3', 'SS_1 Platinum', 'SS_2 Galaxy', 'SS_3']
     },
 
     subjectArea: {

@@ -9,6 +9,7 @@ import morgan from "morgan";
 import authRoute from "./routes/authRoute.js"
 import staffRoute from "./routes/staffRoute.js"
 import studentRoute from "./routes/studentRoute.js"
+import current_userRoute from "./routes/current_userRoute.js"
 import CustomError from "./utils/customError.js";
 import globalErrorHandler from "./controllers/errorController.js"
 import { authenticateStaff } from "./middleware/authMiddleware.js";
@@ -32,6 +33,7 @@ app.set('view engine', 'ejs')
 
 
 app.use('/api/v1/auth', authRoute)
+app.use('/api/v1/current-user',authenticateStaff, current_userRoute)
 app.use('/api/v1/staff', authenticateStaff, staffRoute)
 app.use('/api/v1/student', authenticateStaff, studentRoute)
 

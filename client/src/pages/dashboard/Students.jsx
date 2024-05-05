@@ -2,6 +2,7 @@ import React from "react";
 import customFetch from "../../../utils/customFetch";
 import handleServerError from "../../../utils/handleServerError";
 import { useLoaderData, useOutletContext } from "react-router-dom";
+import { useDashboardContext } from "./DashboardLayout";
 
 export const loader = async () => {
   try {
@@ -9,14 +10,18 @@ export const loader = async () => {
     return data;
   } catch (error) {
     handleServerError(error);
-    return "No Record Found";
+    return error;
   }
 };
 
 const Students = () => {
+  const { currentUser } = useDashboardContext()
+ const currentUserClass = currentUser?.data?.currentUser.staffClass; 
+
+
   const { data } = useLoaderData();
   const { students } = data;
-  const { currentUser } = useOutletContext()
+  
 
   if(!students || students.length === 0){
     return (
@@ -24,7 +29,7 @@ const Students = () => {
       <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-             Student List - (<span className="text-indigo-500">{" "} { currentUser.class } {" "} </span>)
+             Student List - (<span className="text-indigo-500">{" "} { currentUserClass } {" "} </span>)
           </h1>
         </div>
       </header>
@@ -44,12 +49,12 @@ const Students = () => {
       <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-             Student List - (<span className="text-indigo-500">{" "} { currentUser.class } {" "} </span>)
+             Student List - (<span className="text-indigo-500">{" "} { currentUserClass } {" "} </span>)
           </h1>
         </div>
       </header>
       <main>
-        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 overflow-x-auto">
           <table className="table-auto w-full">
             <thead className="bg-gray-300 border-b-2 border-gray-300 text-left">
               <tr>

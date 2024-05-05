@@ -1,25 +1,32 @@
 import { Fragment, createContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Navigate, Outlet, redirect, useLoaderData, useLocation, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  redirect,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import customFetch from "../../../utils/customFetch";
 import { toast } from "react-toastify";
 import handleServerError from "../../../utils/handleServerError";
-import 'animate.css';
-import rolandImg from "../../assets/roland.jpg"
-import logo from "../../assets/logo.png"
+import "animate.css";
+import rolandImg from "../../assets/roland.jpg";
+import logo from "../../assets/logo.png";
 import { useContext } from "react";
 
-export const loader = async () => {
-  try {
-    const { data } = await customFetch.get("/staff/current-user");
-    // console.log(data);
-    return data;
-  } catch (error) {
-    // handleServerError(error);
-    return redirect("/login");
-  }
-};
+// export const loader = async () => {
+//   try {
+//     const { data } = await customFetch.get("/current-user");
+//     // console.log(data);
+//     return data;
+//   } catch (error) {
+//     // handleServerError(error);
+//     return redirect("/login");
+//   }
+// };
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: false },
@@ -32,41 +39,55 @@ const navigation = [
   { name: "Result Sheet", href: "#", current: false },
 ];
 
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const DashboardContext = createContext()
+const DashboardContext = createContext();
 
 export default function DashboardLayout() {
+  const navigate = useNavigate();
+  // const { data } = useLoaderData();
+  // const { currentUser } = data;
 
-  const navigate = useNavigate()
-  const { data } = useLoaderData();
-  const { currentUser } = data;
-
-  const { pathname } = useLocation()
-  const [navigationItems, setNavigationItems] = useState(navigation)
-
+  const { pathname } = useLocation();
+  const [navigationItems, setNavigationItems] = useState(navigation);
+  const [currentUser, setCurrentUser] = useState(null)
 
   useEffect(() => {
     const updatedNavigation = navigation.map((item) => ({
       ...item,
       current: item.href === pathname,
     }));
-    setNavigationItems(updatedNavigation)
-  }, [pathname])
+    setNavigationItems(updatedNavigation);
+  }, [pathname]);
 
+  // console.log('will render this before');
+
+  useEffect(() => {
+    // console.log('will not rerender ');
+    customFetch.get("/current-user")
+      .then(response => {
+        const userData = response.data
+        setCurrentUser(userData)
+      })
+      .catch(error => {
+        // handleServerError(error)
+        navigate('/login')  
+      })
+  }, []);
+
+  // console.log('will render this after');
 
   const handleLogOut = async () => {
     try {
-      await customFetch.get('/auth/logout')
-      navigate('/login')
-      toast.success("Logged Out Successfully")
+      await customFetch.get("/auth/logout");
+      navigate("/login");
+      toast.success("Logged Out Successfully");
     } catch (error) {
-        handleServerError(error)
+      handleServerError(error);
     }
-  }
+  };
 
   const userNavigation = [
     { name: "Your Profile", href: "#" },
@@ -74,22 +95,29 @@ export default function DashboardLayout() {
     { name: "Sign out", onclick: handleLogOut },
   ];
 
-  // const [showAlert, setShowAlert] = useState(true)
+  if (!currentUser) {
+    // You can return a loading indicator here while the user data is being fetched
+    return <div>Loading...</div>;
+  }
 
+const fullName = currentUser?.data?.currentUser.fullName
 
   const user = {
-    name: currentUser.fullName.split(" ").map((eachName) => {
-      return eachName[0].toUpperCase() + eachName.substring(1);
-    }).join(" "),
-    email: currentUser.email,
+    name: fullName
+      ? fullName
+          .split(" ")
+          .map((eachName) => {
+            return eachName[0].toUpperCase() + eachName.substring(1);
+          })
+          .join(" ")
+      : "",
+    email: currentUser?.data?.currentUser.email,
     imageUrl: rolandImg,
   };
   
+
   return (
-
-    <DashboardContext.Provider value={{currentUser}}>
-
-   
+    <DashboardContext.Provider value={{ currentUser }}>
       {/*
         This example requires updating your template:
 
@@ -114,15 +142,18 @@ export default function DashboardLayout() {
                     <div className="flex-shrink-0">
                       <img
                         className="h-12 w-12"
-                        src= {logo}
+                        src={logo}
                         alt="Your Company"
                       />
                     </div>
-                    <div className="hidden md:block">
+                    <div className="hidden lg:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigationItems.map((item) => {
-
-                          if (item.name === 'Staffs' && currentUser.role !== 'admin') return;
+                          if (
+                            item.name === "Staffs" &&
+                            currentUser?.data?.currentUser.role !== "admin"
+                          )
+                            return;
 
                           return (
                             <a
@@ -138,13 +169,12 @@ export default function DashboardLayout() {
                             >
                               {item.name}
                             </a>
-                          )
-                        } 
-                        )}
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
-                  <div className="hidden md:block">
+                  <div className="hidden lg:block">
                     <div className="ml-4 flex items-center md:ml-6">
                       <button
                         type="button"
@@ -191,17 +221,15 @@ export default function DashboardLayout() {
                                   >
                                     {item.name}
                                   </a>
-                    
                                 )}
                               </Menu.Item>
                             ))}
-                          
                           </Menu.Items>
                         </Transition>
                       </Menu>
                     </div>
                   </div>
-                  <div className="-mr-2 flex md:hidden">
+                  <div className="-mr-2 flex lg:hidden">
                     {/* Mobile menu button */}
                     <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-0.5" />
@@ -222,7 +250,7 @@ export default function DashboardLayout() {
                 </div>
               </div>
 
-              <Disclosure.Panel className="md:hidden">
+              <Disclosure.Panel className="lg:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                   {navigationItems.map((item) => (
                     <Disclosure.Button
@@ -285,14 +313,11 @@ export default function DashboardLayout() {
           )}
         </Disclosure>
 
-
         {/* Your content */}
-        <Outlet context = {{currentUser}} />
-
+        <Outlet context={{ currentUser }} />
       </div>
-     
     </DashboardContext.Provider>
   );
 }
 
-// export const useDashboardContext = () => useContext(DashboardContext)
+export const useDashboardContext = () => useContext(DashboardContext);

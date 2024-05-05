@@ -10,15 +10,17 @@ import Register from "./pages/Register.jsx";
 import Error from "./pages/Error.jsx";
 import { action as registerAction } from "./pages/Register.jsx";
 import { action as loginAction } from "./pages/Login.jsx";
-import { loader as dashboardLoader } from "./pages/dashboard/DashboardLayout.jsx";
+// import { loader as dashboardLoader } from "./pages/dashboard/DashboardLayout.jsx";
 import { loader as studentsLoader } from "./pages/dashboard/Students.jsx";
 import { loader as homeLoader } from "./pages/dashboard/DashHome.jsx";
+// import { loader as staffLoader } from "./pages/dashboard/Staffs.jsx";
 import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
 import DashHome from "./pages/dashboard/DashHome.jsx";
 import Students from "./pages/dashboard/Students.jsx";
 import AddStudent from "./pages/dashboard/AddStudent.jsx";
 import LogOut from "./pages/dashboard/LogOut.jsx";
 import Staffs from "./pages/dashboard/Staffs.jsx";
+import UpdateStaff from "./pages/dashboard/UpdateStaff.jsx";
 
 const router = createBrowserRouter([
   {
@@ -58,7 +60,7 @@ const router = createBrowserRouter([
   {
     path: "dashboard",
     element: <DashboardLayout />,
-    loader: dashboardLoader,
+    // loader: dashboardLoader,
     children: [
       {
         index: true,
@@ -67,7 +69,12 @@ const router = createBrowserRouter([
       },
       {
         path: "staffs",
-        element: <Staffs />
+        element: <Staffs />,
+        // loader: staffLoader,
+      },
+      {
+        path: "staff/:id",
+        element: <UpdateStaff />
       },
       {
         path: "students",

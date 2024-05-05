@@ -148,9 +148,9 @@ const AddStudent = () => {
                 >
                   <option value="">Select Class ...</option>
                   <option value="JSS_1 Platinum" >JSS_1 Platinum</option>
-                  <option value="JSS_2">JSS_2</option>
+                  <option value="JSS_2 Galaxy">JSS_2 Galaxy</option>
                   <option value="JSS_3">JSS_3</option>
-                  <option value="SS_1">SS_1</option>
+                  <option value="SS_1 Platinum">SS_1 Platinum</option>
                   <option value="SS_2 Galaxy">SS_2 Galaxy</option>
                   <option value="SS_3">SS_3</option>
                 </select>
