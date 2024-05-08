@@ -8,7 +8,6 @@ import { useDashboardContext } from "./DashboardLayout";
 export const loader = async () => {
   try {
     const { data } = await customFetch.get("/student");
-
     return data;
   } catch (error) {
     handleServerError(error);
@@ -20,9 +19,9 @@ const DashHome = () => {
  const { currentUser } = useDashboardContext()
  const currentUserClass = currentUser?.data?.currentUser.staffClass; 
 
-  // console.log(currentUserData);
   const { data } = useLoaderData();
   const { students } = data;
+
 
   return (
     <div>

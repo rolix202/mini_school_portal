@@ -11,7 +11,7 @@ import Error from "./pages/Error.jsx";
 import { action as registerAction } from "./pages/Register.jsx";
 import { action as loginAction } from "./pages/Login.jsx";
 // import { loader as dashboardLoader } from "./pages/dashboard/DashboardLayout.jsx";
-import { loader as studentsLoader } from "./pages/dashboard/Students.jsx";
+// import { loader as studentsLoader } from "./pages/dashboard/Students.jsx";
 import { loader as homeLoader } from "./pages/dashboard/DashHome.jsx";
 // import { loader as staffLoader } from "./pages/dashboard/Staffs.jsx";
 import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
@@ -20,7 +20,7 @@ import Students from "./pages/dashboard/Students.jsx";
 import AddStudent from "./pages/dashboard/AddStudent.jsx";
 import LogOut from "./pages/dashboard/LogOut.jsx";
 import Staffs from "./pages/dashboard/Staffs.jsx";
-import UpdateStaff from "./pages/dashboard/UpdateStaff.jsx";
+// import UpdateStaff from "./pages/dashboard/UpdateStaff.jsx";
 
 const router = createBrowserRouter([
   {
@@ -72,14 +72,39 @@ const router = createBrowserRouter([
         element: <Staffs />,
         // loader: staffLoader,
       },
-      {
-        path: "staff/:id",
-        element: <UpdateStaff />
-      },
+      // {
+      //   path: "staff/:id",
+      //   element: <UpdateStaff />
+      // },
       {
         path: "students",
         element: <Students />,
-        loader: studentsLoader
+        // loader: studentsLoader
+      },
+      {
+        path: "jss-students",
+        children: [
+          {
+            path: "jss1-galaxy"
+          },
+          {
+            path: "jss1-platinum"
+          },
+          {
+            path: "jss1-rose"
+          }
+        ]
+      },
+      {
+        path: "sss-students",
+        children: [
+          {
+            path: "ss1-galaxy"
+          },
+          {
+            path: "ss1-platinum"
+          },
+        ]
       },
       {
         path: "add-student",

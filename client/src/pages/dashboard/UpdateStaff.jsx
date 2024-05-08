@@ -57,7 +57,6 @@ const UpdateStaff = () => {
     }
     
     try {
-      console.log(staffData);
       await customFetch.patch(`staff/${id}`, staffData)
       toast.success("Staff information Updated Successfully")
       navigate('/dashboard/staffs')

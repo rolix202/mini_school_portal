@@ -14,6 +14,9 @@ router.route('/:id')
         .get(getStudent)
         .patch(updateStudent)
         .delete(deleteStudent)
+router.route('/jss1-students')
+        .get()
+router.route('jss1-students/jss-galaxy')
 
 
 export default router

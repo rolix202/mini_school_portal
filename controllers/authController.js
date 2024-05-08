@@ -21,7 +21,7 @@ export const signup = asyncErrorHandler(async (req, res, next) => {
 
     staff.password = undefined;
 
-    const token = createJWT({staffId: staff._id, role: staff.role, assignedClass: staff.class, subject: staff.subject})
+    const token = createJWT({staffId: staff._id, role: staff.role, assignedClass: staff.staffClass, subject: staff.subject})
 
     res.cookie('token', token, options)
 
@@ -48,7 +48,7 @@ export const login = asyncErrorHandler(async (req, res,next) => {
         return next(error)
     }
 
-    const token = createJWT({staffId: staff._id, role: staff.role, assignedClass: staff.class, subject: staff.subject})
+    const token = createJWT({staffId: staff._id, role: staff.role, assignedClass: staff.staffClass, subject: staff.subject})
 
     res.cookie('token', token, options)
 

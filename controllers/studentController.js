@@ -23,7 +23,7 @@ export const getAllStudent = asyncErrorHandler(async (req, res, next) => {
 
     const { assignedClass } = req.staff
 
-    const students = await Student.find({class: assignedClass})
+    const students = await Student.find({staffClass: assignedClass})
 
     // if (students.length === 0){
     //     const error = new CustomError("No student found", 404)
