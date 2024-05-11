@@ -28,7 +28,7 @@ const Students = () => {
   useEffect(() => {
     const getAllStudents = async () => {
       try {
-        const data = await customFetch.get('/student')
+        const data = await customFetch.get('/students')
         setStudents(data?.data?.data?.students);
       } catch (error) {
         handleServerError(error)

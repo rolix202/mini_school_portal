@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import { STUDENT_CLASS } from "../utils/constants.js";
 
 const studentSchema = new mongoose.Schema({
     studentID: String,
@@ -16,7 +17,8 @@ const studentSchema = new mongoose.Schema({
     studentClass: {
         type: String,
         required: [true, 'Choose student class'],
-        enum: ['JSS_1 Platinum', 'JSS_1 Rose', 'JSS_1 Galaxy', 'JSS_2 Rose', 'JSS_2 Galaxy', 'JSS_3 Rose', 'JSS_3 Galaxy', 'SS_1 Platinum', 'SS_1 Galaxy', 'SS_2 Galaxy', 'SS_2 Platinum', 'SS_3 Galaxy', 'SS_3 Platinum']
+        // enum: ['JSS_1 Platinum', 'JSS_1 Rose', 'JSS_1 Galaxy', 'JSS_2 Rose', 'JSS_2 Galaxy', 'JSS_3 Rose', 'JSS_3 Galaxy', 'SS_1 Platinum', 'SS_1 Galaxy', 'SS_2 Galaxy', 'SS_2 Platinum', 'SS_3 Galaxy', 'SS_3 Platinum']
+        enum: Object.values(STUDENT_CLASS)
     },
 
     subjectArea: {
@@ -24,13 +26,13 @@ const studentSchema = new mongoose.Schema({
         required: [true, 'Select student subject Area'],
         enum: ['Sciences', 'Arts', 'Junior Classes']
     },
-    
+
     assignedSubjects: {
         type: [{
             type: String
         }],
         validate: {
-            validator: function(val){
+            validator: function (val) {
                 return val.length > 4
             },
             message: "Please assign at least five subject and above"
@@ -38,7 +40,7 @@ const studentSchema = new mongoose.Schema({
     }
 })
 // Define a pre-save hook to generate the studentID
-studentSchema.pre('save', async function(next) {
+studentSchema.pre('save', async function (next) {
     try {
         const count = await Student.countDocuments({ studentClass: this.studentClass });
         const sequentialNumber = (count + 1).toString().padStart(2, '0'); // Ensure at least two digits with leading zeros
@@ -49,7 +51,6 @@ studentSchema.pre('save', async function(next) {
         next(error);
     }
 });
-
 
 
 const Student = mongoose.model('Student', studentSchema)

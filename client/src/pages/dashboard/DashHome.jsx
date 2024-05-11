@@ -7,7 +7,7 @@ import { useDashboardContext } from "./DashboardLayout";
 
 export const loader = async () => {
   try {
-    const { data } = await customFetch.get("/student");
+    const { data } = await customFetch.get("/students");
     return data;
   } catch (error) {
     handleServerError(error);

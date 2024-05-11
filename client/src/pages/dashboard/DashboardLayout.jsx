@@ -17,6 +17,7 @@ import rolandImg from "../../assets/roland.jpg";
 import logo from "../../assets/logo.png";
 import { useContext } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import Loader from "../../components/Loader";
 
 // export const loader = async () => {
 //   try {
@@ -36,123 +37,91 @@ const navigation = [
     name: "Students",
     href: "/dashboard/students",
     current: false,
-    subMenus: [
-      {
-        name: "JSS_1 Galaxy",
-        href: "/dashboard/students/jss1-galaxy",
-        current: false,
-      },
-      {
-        name: "JSS_1 Galaxy",
-        href: "/dashboard/students/jss1-galaxy",
-        current: false,
-      },
-      {
-        name: "JSS_1 Galaxy",
-        href: "/dashboard/students/jss1-galaxy",
-        current: false,
-      },
-      {
-        name: "JSS_1 Galaxy",
-        href: "/dashboard/students/jss1-galaxy",
-        current: false,
-      },
-      {
-        name: "JSS_1 Galaxy",
-        href: "/dashboard/students/jss1-galaxy",
-        current: false,
-      },
-      {
-        name: "JSS_1 Galaxy",
-        href: "/dashboard/students/jss1-galaxy",
-        current: false,
-      },
-    ],
   },
   {
     name: "JSS Students",
-    href: "/dashboard/jss-students",
+    href: "/dashboard/students",
     current: false,
     submenus: [
       {
         name: "JSS_1 Galaxy",
-        href: "/dashboard/jss-students/jss1-galaxy",
+        href: "/dashboard/students/jss/jss1-galaxy",
         current: false,
       },
       {
         name: "JSS_1 Platinum",
-        href: "/dashboard/jss-students/jss1-platinum",
+        href: "/dashboard/students/jss/jss1-platinum",
         current: false,
       },
       {
         name: "JSS_1 Rose",
-        href: "/dashboard/jss-students/jss1-rose",
+        href: "/dashboard/students/jss/jss1-rose",
         current: false,
       },
 
       {
         name: "JSS_2 Galaxy",
-        href: "/dashboard/jss-students/jss2-galaxy",
+        href: "/dashboard/students/jss/jss2-galaxy",
         current: false,
       },
       {
         name: "JSS_2 Platinum",
-        href: "/dashboard/jss-students/jss2-platinum",
+        href: "/dashboard/students/jss/jss2-platinum",
         current: false,
       },
       {
         name: "JSS_2 Rose",
-        href: "/dashboard/jss-students/jss2-rose",
+        href: "/dashboard/students/jss/jss2-rose",
         current: false,
       },
 
       {
         name: "JSS_3 Galaxy",
-        href: "/dashboard/jss-students/jss3-galaxy",
+        href: "/dashboard/students/jss/jss3-galaxy",
         current: false,
       },
       {
-        name: "JSS_3 Platinum",
-        href: "/dashboard/jss-students/jss3-platinum",
+        name: "JSS_3 Rose",
+        href: "/dashboard/students/jss/jss3-rose",
         current: false,
       },
     ],
   },
   {
     name: "SSS Students",
-    href: "/dashboard/sss-students",
+    href: "/dashboard/students",
     current: false,
     submenus: [
       {
         name: "SS_1 Galaxy",
-        href: "/dashboard/sss-students/ss1-galaxy",
+        href: "/dashboard/students/sss/ss1-galaxy",
         current: false,
       },
       {
         name: "SS_1 Platinum",
-        href: "/dashboard/sss-students/ss1-platinum",
+        href: "/dashboard/students/sss/ss1-platinum",
         current: false,
       },
 
       {
         name: "SS_2 Galaxy",
-        href: "/dashboard/sss-students/ss2-galaxy",
+        href: "/dashboard/students/sss/ss2-galaxy",
         current: false,
       },
       {
         name: "SS_2 Platinum",
-        href: "/dashboard/sss-students/ss2-platinum",
+        href: "/dashboard/students/sss/ss2-platinum",
         current: false,
       },
 
       {
         name: "SS_3 Galaxy",
-        href: "/dashboard/sss-students/ss3-galaxy",
+        href: "/dashboard/students/sss/ss3-galaxy",
         current: false,
       },
       {
         name: "SS_3 Platinum",
-        href: "/dashboard/sss-students/ss3-platinum",
+        href: "/dashboard/students/sss/ss3-platinum",
         current: false,
       },
     ],
@@ -178,26 +147,8 @@ export default function DashboardLayout() {
   const { pathname } = useLocation();
   const [navigationItems, setNavigationItems] = useState(navigation);
   const [currentUser, setCurrentUser] = useState(null);
-  const [openSubMenu, setOpenSubMenu] = useState(null);
-  const submenuRef = useRef(null);
-
-  useEffect(() => {
-    // Function to handle click outside the submenu
-    const handleClickOutside = (event) => {
-      if (submenuRef.current && !submenuRef.current.contains(event.target)) {
-        setOpenSubMenu(null);
-      }
-    };
-
-    // Add event listener to handle clicks outside the submenu
-    document.addEventListener("mousedown", handleClickOutside);
-
-    // Cleanup function to remove event listener
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
+ 
+ 
   useEffect(() => {
     const updatedNavigation = navigation.map((item) => ({
       ...item,
@@ -206,23 +157,24 @@ export default function DashboardLayout() {
     setNavigationItems(updatedNavigation);
   }, [pathname]);
 
-  // console.log('will render this before');
-
   useEffect(() => {
-    // console.log('will not rerender ');
-    customFetch
-      .get("/current-user")
-      .then((response) => {
-        const userData = response.data;
-        setCurrentUser(userData);
-      })
-      .catch((error) => {
-        // handleServerError(error)
-        navigate("/login");
-      });
-  }, []);
+    const fetchCurrentUser = async () => {
+        try {
+          const response = await customFetch.get("/current-user");
+          const userData = response.data;
+          setCurrentUser(userData)
+          
+        } catch (error) {
+          navigate('/login')
+        } 
+        
+    }
 
-  // console.log('will render this after');
+    if (!currentUser){
+      fetchCurrentUser()
+    }
+    
+  }, []);
 
   const handleLogOut = async () => {
     try {
@@ -234,20 +186,13 @@ export default function DashboardLayout() {
     }
   };
 
-  const handleSubMenuClick = (index) => {
-    setOpenSubMenu(openSubMenu === index ? null : index);
-  };
+
 
   const userNavigation = [
     { name: "Your Profile", href: "#" },
     { name: "Settings", href: "#" },
     { name: "Sign out", onclick: handleLogOut },
   ];
-
-  if (!currentUser) {
-    // You can return a loading indicator here while the user data is being fetched
-    return <div>Loading...</div>;
-  }
 
   const fullName = currentUser?.data?.currentUser.fullName;
 
@@ -266,20 +211,7 @@ export default function DashboardLayout() {
 
   return (
     <DashboardContext.Provider value={{ currentUser }}>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
-
-      {/* className="bg-cover bg-center bg-fixed"
-      style={{
-        backgroundImage: 'url("https://picsum.photos/1920/1080")'
-      }} */}
-
+   
       <div className="min-h-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
@@ -584,7 +516,7 @@ export default function DashboardLayout() {
         </Disclosure>
 
         {/* Your content */}
-        <Outlet context={{ currentUser }} />
+        <Outlet />
       </div>
     </DashboardContext.Provider>
   );

@@ -34,8 +34,8 @@ app.set('view engine', 'ejs')
 
 app.use('/api/v1/auth', authRoute)
 app.use('/api/v1/current-user',authenticateStaff, current_userRoute)
-app.use('/api/v1/staff', authenticateStaff, staffRoute)
-app.use('/api/v1/student', authenticateStaff, studentRoute)
+app.use('/api/v1/staffs', authenticateStaff, staffRoute)
+app.use('/api/v1/students', authenticateStaff, studentRoute)
 
 
 // NOT FOUND ROUTE

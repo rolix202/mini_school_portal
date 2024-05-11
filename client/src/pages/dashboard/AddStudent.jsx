@@ -7,6 +7,7 @@ import customFetch from "../../../utils/customFetch";
 const areasAndSubjects = {
   'Sciences': ['English', 'Mathematics', 'Biology', 'Physics', 'Chemistry','Agric', 'Geography', 'Civic Education', 'Economics'],
   'Arts': ['English', 'Mathematics', 'Economics', 'Literature', 'History', 'Government', 'Commerce', 'C.R.S', 'Marketing', 'Civic Education'],
+  'Junior students': ['English', 'Mathematics']
   // Add more areas and subjects as needed
 };
 

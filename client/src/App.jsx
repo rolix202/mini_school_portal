@@ -20,6 +20,20 @@ import Students from "./pages/dashboard/Students.jsx";
 import AddStudent from "./pages/dashboard/AddStudent.jsx";
 import LogOut from "./pages/dashboard/LogOut.jsx";
 import Staffs from "./pages/dashboard/Staffs.jsx";
+import Sss2galaxy from "./pages/dashboard/sss/Ss2Galaxy.jsx";
+import Ss2Platinum from "./pages/dashboard/sss/Ss2Platinum.jsx";
+import Ss1Galaxy from "./pages/dashboard/sss/Ss1Galaxy.jsx";
+import Ss1Platinum from "./pages/dashboard/sss/Ss1Platinum.jsx";
+import Ss3Galaxy from "./pages/dashboard/sss/Ss3Galaxy.jsx";
+import Ss3Platinum from "./pages/dashboard/sss/Ss3Platinum.jsx";
+import Js1Galaxy from "./pages/dashboard/jss/Js1Galaxy.jsx";
+import Js1Platinum from "./pages/dashboard/jss/Js1Platinum.jsx";
+import Js1Rose from "./pages/dashboard/jss/Js1Rose.jsx";
+import Js2Galaxy from "./pages/dashboard/jss/Js2Galaxy.jsx";
+import Js2Platinum from "./pages/dashboard/jss/Js2Platinum.jsx";
+import Js2Rose from "./pages/dashboard/jss/Js2Rose.jsx";
+import Js3Galaxy from "./pages/dashboard/jss/Js3Galaxy.jsx";
+import Js3Rose from "./pages/dashboard/jss/Js3Rose.jsx";
 // import UpdateStaff from "./pages/dashboard/UpdateStaff.jsx";
 
 const router = createBrowserRouter([
@@ -81,29 +95,102 @@ const router = createBrowserRouter([
         element: <Students />,
         // loader: studentsLoader
       },
+      // {
+      //   path: "jss",
+      //   children: [
+      //     {
+      //       path: "jss1-galaxy",
+      //       element: <Js1Galaxy />
+      //     },
+      //     {
+      //       path: "jss1-platinum",
+      //       element: <Js1Platinum />
+      //     },
+      //     {
+      //       path: "jss1-rose",
+      //       element: <Js1Rose />
+      //     },
+      //     {
+      //       path: "jss2-galaxy",
+      //       element: <Js2Galaxy />
+      //     },
+      //     {
+      //       path: "jss2-platinum",
+      //       element: <Js2Platinum />
+      //     },
+      //     {
+      //       path: "jss2-rose",
+      //       element: <Js2Rose />
+      //     },
+      //     {
+      //       path: "jss3-galaxy",
+      //       element: <Js3Galaxy />
+      //     },
+      //     {
+      //       path: "jss3-rose",
+      //       element: <Js3Rose />
+      //     }
+      //   ]
+      // },
       {
-        path: "jss-students",
+        path: "students",
         children: [
           {
-            path: "jss1-galaxy"
+            path: "jss/jss1-galaxy",
+            element: <Js1Galaxy />
           },
           {
-            path: "jss1-platinum"
+            path: "jss/jss1-platinum",
+            element: <Js1Platinum />
           },
           {
-            path: "jss1-rose"
+            path: "jss/jss1-rose",
+            element: <Js1Rose />
+          },
+          {
+            path: "jss/jss2-galaxy",
+            element: <Js2Galaxy />
+          },
+          {
+            path: "jss/jss2-platinum",
+            element: <Js2Platinum />
+          },
+          {
+            path: "jss/jss2-rose",
+            element: <Js2Rose />
+          },
+          {
+            path: "jss/jss3-galaxy",
+            element: <Js3Galaxy />
+          },
+          {
+            path: "jss/jss3-rose",
+            element: <Js3Rose />
+          },
+          {
+            path: "sss/ss1-galaxy",
+            element: <Ss1Galaxy />
+          },
+          {
+            path: "sss/ss1-platinum",
+            element: <Ss1Platinum />
+          },
+          {
+            path: "sss/ss2-galaxy",
+            element: <Sss2galaxy />
+          },
+          {
+            path: "sss/ss2-platinum",
+            element: <Ss2Platinum />
+          },
+          {
+            path: "sss/ss3-galaxy",
+            element: <Ss3Galaxy />
+          },
+          {
+            path: "sss/ss3-platinum",
+            element: <Ss3Platinum />
           }
-        ]
-      },
-      {
-        path: "sss-students",
-        children: [
-          {
-            path: "ss1-galaxy"
-          },
-          {
-            path: "ss1-platinum"
-          },
         ]
       },
       {
@@ -123,21 +210,7 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
-    // <BrowserRouter>
-    //   <Routes>
-    //     <Route path="/" element={<Layout />}>
-    //       <Route index element={<Home />} />
-    //       <Route path="login" element = {<Login />} />
-    //       <Route path="gallery" element = {<Gallery />} />
-    //       <Route path="about" element = {<About />} />
-    //       <Route path="contact" element = {<Contact />} />
-    //       <Route path="register" element = {<Register />} />
-    //     </Route>
-    //   </Routes>
-    // </BrowserRouter>
-
     <RouterProvider router={router} />
-
   )
 }
 

@@ -34,7 +34,7 @@ const Staffs = () => {
 
   const getAllStaff = async () => {
     try {
-      const data = await customFetch.get("/staff");
+      const data = await customFetch.get("/staffs");
       setStaffData(data?.data?.data);
     } catch (error) {
       handleServerError(error);

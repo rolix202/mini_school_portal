@@ -20,15 +20,11 @@ export const addStudent = asyncErrorHandler(async (req, res, next) => {
 }) 
 
 export const getAllStudent = asyncErrorHandler(async (req, res, next) => {
+    // console.log(req.query);
 
     const { assignedClass } = req.staff
 
     const students = await Student.find({staffClass: assignedClass})
-
-    // if (students.length === 0){
-    //     const error = new CustomError("No student found", 404)
-    //     return next(error)
-    // }
 
     res.status(200).json({
         status: 'success',
@@ -83,3 +79,17 @@ export const deleteStudent = asyncErrorHandler(async (req, res, next) => {
         data: null
     })
 }) 
+
+
+export const getJuniorStudents = asyncErrorHandler(async (req, res, next) => {
+    
+    const students = await Student.find({studentClass: req.params.classId})
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            students
+        }
+    })
+
+})
