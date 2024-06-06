@@ -34,6 +34,8 @@ import Js2Platinum from "./pages/dashboard/jss/Js2Platinum.jsx";
 import Js2Rose from "./pages/dashboard/jss/Js2Rose.jsx";
 import Js3Galaxy from "./pages/dashboard/jss/Js3Galaxy.jsx";
 import Js3Rose from "./pages/dashboard/jss/Js3Rose.jsx";
+import Cat1 from "./pages/Cat1.jsx";
+import AddAssessment from "./pages/dashboard/AddAssessment.jsx";
 // import UpdateStaff from "./pages/dashboard/UpdateStaff.jsx";
 
 const router = createBrowserRouter([
@@ -86,52 +88,8 @@ const router = createBrowserRouter([
         element: <Staffs />,
         // loader: staffLoader,
       },
-      // {
-      //   path: "staff/:id",
-      //   element: <UpdateStaff />
-      // },
-      {
-        path: "students",
-        element: <Students />,
-        // loader: studentsLoader
-      },
-      // {
-      //   path: "jss",
-      //   children: [
-      //     {
-      //       path: "jss1-galaxy",
-      //       element: <Js1Galaxy />
-      //     },
-      //     {
-      //       path: "jss1-platinum",
-      //       element: <Js1Platinum />
-      //     },
-      //     {
-      //       path: "jss1-rose",
-      //       element: <Js1Rose />
-      //     },
-      //     {
-      //       path: "jss2-galaxy",
-      //       element: <Js2Galaxy />
-      //     },
-      //     {
-      //       path: "jss2-platinum",
-      //       element: <Js2Platinum />
-      //     },
-      //     {
-      //       path: "jss2-rose",
-      //       element: <Js2Rose />
-      //     },
-      //     {
-      //       path: "jss3-galaxy",
-      //       element: <Js3Galaxy />
-      //     },
-      //     {
-      //       path: "jss3-rose",
-      //       element: <Js3Rose />
-      //     }
-      //   ]
-      // },
+   
+    
       {
         path: "students",
         children: [
@@ -196,6 +154,20 @@ const router = createBrowserRouter([
       {
         path: "add-student",
         element: <AddStudent />
+      },
+      {
+        path: "assessments",
+        children: [
+          {
+            path: "add-assessment",
+            element: <AddAssessment />
+          },
+          {
+            path: "view-assessment",
+            element: <Cat1 />
+          }
+        ]
+        
       }
 
     ]

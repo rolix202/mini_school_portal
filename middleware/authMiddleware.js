@@ -32,9 +32,9 @@ export const authenticateStaff = asyncErrorHandler(async (req, res, next) => {
         return next(error)
     }
 
-    const { staffId, role, assignedClass } = decodedToken
+    const { staffId, role, assignedClass, subject } = decodedToken
 
-    req.staff = { staffId, role, assignedClass }
+    req.staff = { staffId, role, assignedClass, subject }
 
     next();
 }) 

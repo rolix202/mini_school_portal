@@ -20,16 +20,32 @@ export const addStudent = asyncErrorHandler(async (req, res, next) => {
 }) 
 
 export const getAllStudent = asyncErrorHandler(async (req, res, next) => {
-    // console.log(req.query);
+ 
+    const { subject, assignedClass } = req.staff
 
-    const { assignedClass } = req.staff
+    // if (!subject || !assignedClass){
+    //     const error = new CustomError("Please provide both subject and studentClass", 400)
+    //     return next(error)
+    // }
 
-    const students = await Student.find({staffClass: assignedClass})
+    const students = await Student.find({
+        assignedSubjects: subject,
+        studentClass: assignedClass
+    })
+
+    const filteredStudent = students.map((student) => ({
+       name: student.name,
+       studentID: student._id,
+       subjectArea: student.subjectArea,
+       subject: student.assignedSubjects.filter((sub) => sub == subject)
+
+    }))
 
     res.status(200).json({
         status: 'success',
+        length: filteredStudent.length,
         data: {
-            students
+            filteredStudent
         }   
     })
 }) 

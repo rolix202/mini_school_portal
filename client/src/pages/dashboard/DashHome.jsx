@@ -20,7 +20,7 @@ const DashHome = () => {
  const currentUserClass = currentUser?.data?.currentUser.staffClass; 
 
   const { data } = useLoaderData();
-  const { students } = data;
+  // const { students } = data;
 
 
   return (
@@ -44,7 +44,7 @@ const DashHome = () => {
                       No. of Students
                     </div>
                     <h1 className="text-gray-700 text-6xl">
-                      {students ? students.length : 0}
+                      {/* {students ? students.length : 0} */}
                     </h1>
 
                     <div className="pt-8">

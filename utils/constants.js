@@ -13,3 +13,11 @@ export const STUDENT_CLASS = {
     SS3_G: 'SS_3 Galaxy', 
     SS3_P: 'SS_3 Platinum'
 }
+
+export const ASSESSMENT_CATEGORY = {
+    CAT_1: 'cat_1',
+    CAT_2: 'cat_2',
+    CAT_3: 'cat_3',
+    exam: 'exam'
+}
+

@@ -3,35 +3,25 @@ import { Form, redirect } from "react-router-dom";
 import handleServerError from "../../../utils/handleServerError";
 import { toast } from "react-toastify";
 import customFetch from "../../../utils/customFetch";
-
-const areasAndSubjects = {
-  'Sciences': ['English', 'Mathematics', 'Biology', 'Physics', 'Chemistry','Agric', 'Geography', 'Civic Education', 'Economics'],
-  'Arts': ['English', 'Mathematics', 'Economics', 'Literature', 'History', 'Government', 'Commerce', 'C.R.S', 'Marketing', 'Civic Education'],
-  'Junior students': ['English', 'Mathematics']
-  // Add more areas and subjects as needed
-};
-
+import { areasAndSubjects } from "../../../utils/constants";
 
 const AddStudent = () => {
-  const [ formDetails, setFormDetails ] = useState({
+  const [formDetails, setFormDetails] = useState({
     fullName: "",
-    class: ""
-  })
+    classType: "",
+    studentClass: "",
+  });
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedSubjects, setSelectedSubjects] = useState([]);
-  const [isSubmitting, setIssubmitting] = useState(false)
-
-
 
   const handleFormDetails = (e) => {
-      setFormDetails((prevFormDetails) => {
-        return {
-          ...prevFormDetails,
-        [e.target.name]: e.target.value
-        }
-      })
-  }
-
+    setFormDetails((prevFormDetails) => {
+      return {
+        ...prevFormDetails,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
 
   const handleAreaChange = (event) => {
     const area = event.target.value;
@@ -42,12 +32,14 @@ const AddStudent = () => {
   const handleSubjectChange = (event) => {
     const selectedSubject = event.target.value;
     const isChecked = event.target.checked;
-  
+
     setSelectedSubjects((prevSelectedSubjects) => {
       if (isChecked) {
         return [...prevSelectedSubjects, selectedSubject];
       } else {
-        return prevSelectedSubjects.filter((subject) => subject !== selectedSubject);
+        return prevSelectedSubjects.filter(
+          (subject) => subject !== selectedSubject
+        );
       }
     });
   };
@@ -55,46 +47,46 @@ const AddStudent = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (selectedSubjects.length === 0) {
-      toast.error("Select at least 5 subjects for the student")
+      toast.error("Select at least 5 subjects for the student");
       return;
     }
 
-    if (!formDetails.fullName || !formDetails.class || !selectedArea || !selectedSubjects){
-        toast.error("Please fill out all required fields.");
-        return
+    if (
+      !formDetails.fullName ||
+      !formDetails.studentClass ||
+      !formDetails.classType ||
+      !selectedArea ||
+      !selectedSubjects
+    ) {
+      toast.error("Please fill out all required fields.");
+      return;
     }
-      
 
     const formData = {
       name: formDetails.fullName,
-      class: formDetails.class,
+      classType: formDetails.classType,
+      studentClass: formDetails.studentClass,
       subjectArea: selectedArea,
-      assignedSubjects: selectedSubjects
-    }
-
-    setIssubmitting(true)
+      assignedSubjects: selectedSubjects,
+    };
 
     try {
-      await customFetch.post('/student', formData)
+      await customFetch.post("/students", formData);
 
-      toast.success("Student added Successfully")
+      toast.success("Student added Successfully");
 
       setFormDetails({
         fullName: "",
-        class: ""
+        classType: "",
+        studentClass: "",
       });
       setSelectedArea("");
       setSelectedSubjects([]);
-
     } catch (error) {
-      handleServerError(error)
-      return error
-    } finally{
-      setIssubmitting(false)
+      handleServerError(error);
+      return error;
     }
-    
   };
-  
 
   return (
     <div className="addStudent_containe">
@@ -115,51 +107,116 @@ const AddStudent = () => {
                     Student Information
                   </h2>
                   <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
-
-                  <div className="sm:col-span-4">
-                  <label htmlFor="fullName" className="block text-sm font-medium leading-6 text-gray-900">
-                    Full Name
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      name="fullName"
-                      id="fullName"
-                      required
-                      value={formDetails.fullName}
-                      onChange={handleFormDetails}
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 required:"
-                    />
-                  </div>
-                </div>
-
-                <div className="sm:col-span-2">
-              <label htmlFor="class" className="block text-sm font-medium leading-6 text-gray-900">
-                Class
-              </label>
-              <div className="mt-2">
-                <select
-                  id="class"
-                  name="class"
-                  required
-                  value={formDetails.class}
-                  onChange={handleFormDetails}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  <option value="">Select Class ...</option>
-                  <option value="JSS_1 Platinum" >JSS_1 Platinum</option>
-                  <option value="JSS_2 Galaxy">JSS_2 Galaxy</option>
-                  <option value="JSS_3">JSS_3</option>
-                  <option value="SS_1 Platinum">SS_1 Platinum</option>
-                  <option value="SS_2 Galaxy">SS_2 Galaxy</option>
-                  <option value="SS_3">SS_3</option>
-                </select>
-              </div>
-            </div>
-
+                    <div className="sm:col-span-6">
+                      <label
+                        htmlFor="fullName"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Full Name
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          name="fullName"
+                          id="fullName"
+                          required
+                          value={formDetails.fullName}
+                          onChange={handleFormDetails}
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 required:"
+                        />
+                      </div>
+                    </div>
 
                     <div className="sm:col-span-3">
+                      <label
+                        htmlFor="fullName"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Class Section
+                      </label>
+                      <div className="mt-2">
+                        <select
+                          id="classType"
+                          name="classType"
+                          value={formDetails.classType}
+                          onChange={handleFormDetails}
+                          required
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                        >
+                          <option value="">Select Class Section ...</option>
+                          <option value="junior secondary">
+                            Junior Secondary
+                          </option>
+                          <option value="senior secondary">
+                            Senior Secondary
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="class"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Class
+                      </label>
+                      <div className="mt-2">
+                        {formDetails.classType === "junior secondary" ? (
+                          <select
+                            id="studentClass"
+                            name="studentClass"
+                            required
+                            value={formDetails.studentClass}
+                            onChange={handleFormDetails}
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                          >
+                            <option value="">Select Class ...</option>
+                            <option value="JSS_1 Platinum">
+                              JSS_1 Platinum
+                            </option>
+                            <option value="JSS_1 Rose">JSS_1 Rose</option>
+                            <option value="JSS_1 Galaxy">JSS_1 Galaxy</option>
+                            <option value="JSS_2 Rose">JSS_2 Rose</option>
+                            <option value="JSS_2 Galaxy">JSS_2 Galaxy</option>
+                            <option value="JSS_3 Rose">JSS_3 Rose</option>
+                            <option value="JSS_3 Galaxy">JSS_3 Galaxy</option>
+                          </select>
+                        ) : formDetails.classType === "senior secondary" ? (
+                          <select
+                            id="studentClass"
+                            name="studentClass"
+                            required
+                            value={formDetails.studentClass}
+                            onChange={handleFormDetails}
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                          >
+                            <option value="">Select Class ...</option>
+                            <option value="SS_1 Galaxy">SS_1 Galaxy</option>
+                            <option value="SS_1 Platinum">SS_1 Platinum</option>
+                            <option value="SS_2 Galaxy">SS_2 Galaxy</option>
+                            <option value="SS_2 Platinum">SS_2 Platinum</option>
+                            <option value="SS_3 Galaxy">SS_3 Galaxy</option>
+                            <option value="SS_3 Platinum">SS_3 Platinum</option>
+                          </select>
+                        ) : (
+                          <select
+                            id="studentClass"
+                            name="studentClass"
+                            required
+                            value={formDetails.studentClass}
+                            onChange={handleFormDetails}
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                          >
+                            <option value="">
+                              Choose class section first ...
+                            </option>
+                          </select>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-6">
                       <label
                         htmlFor="area"
                         className="block text-sm font-medium leading-6 text-gray-900"
@@ -177,7 +234,14 @@ const AddStudent = () => {
                         >
                           <option value="">Choose subject area ...</option>
                           {Object.keys(areasAndSubjects).map((area) => (
-                            <option key={area} value={area}>
+                            <option
+                              key={area}
+                              value={area}
+                              disabled={
+                                formDetails.classType === "junior secondary" &&
+                                (area === "Sciences" || area === "Arts")
+                              }
+                            >
                               {area}
                             </option>
                           ))}
@@ -185,17 +249,22 @@ const AddStudent = () => {
                       </div>
                     </div>
 
-                    <div className="sm:col-span-3">
-                      <label
-                        htmlFor="subjects"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Subjects
-                      </label>
-                      <div className="mt-2">
-                        <div className="grid grid-cols-1 gap-y-4">
+                    
+                      {selectedArea && (
+                        <div className="sm:col-span-6">
+                      
+                        <label
+                          htmlFor="subjects"
+                          className="block text-sm font-medium leading-6 text-red-800"
+                        >
+                          Select Subjects for Student :
+                        </label>
+                        <div className="mt-2 flex flex-wrap">
                           {areasAndSubjects[selectedArea]?.map((subject) => (
-                            <label key={subject} className="flex items-center">
+                            <label
+                              key={subject}
+                              className="flex items-center mr-4 mb-2"
+                            >
                               <input
                                 type="checkbox"
                                 name="subjects"
@@ -209,26 +278,18 @@ const AddStudent = () => {
                           ))}
                         </div>
                       </div>
-                    </div>
+                      )}
+                    
                   </div>
                 </div>
 
                 <div className="mt-6 flex items-center justify-end gap-x-6">
-                  {isSubmitting ? (
-                    <div className="flex items-center">
-                      <svg className="animate-spin h-5 w-5 mr-3 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A8.004 8.004 0 014 4.436M20 12h-4a8.001 8.001 0 00-7.064 4.336M16 16.735A7.963 7.963 0 0112 20c4.418 0 8-3.582 8-8h-4zm-12 0a7.963 7.963 0 014-3.265M8.073 7.265A7.963 7.963 0 0112 4c-4.418 0-8 3.582-8 8h4zm8.854 9.47A8.004 8.004 0 0120 19.564M16.794 7.265a8.004 8.004 0 00-3.72-2.765"></path>
-                      </svg>
-                      <span>Saving...</span>
-                    </div>
-                  ) : (<button
+                  <button
                     type="submit"
                     className="w-full rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Submit
-                  </button>) }
-                  
+                  </button>
                 </div>
               </div>
             </Form>
@@ -240,3 +301,231 @@ const AddStudent = () => {
 };
 
 export default AddStudent;
+
+
+
+
+// import React, { useState } from "react";
+// import { Form } from "react-router-dom";
+// import { toast } from "react-toastify";
+// import { areasAndSubjects } from "../../../utils/constants";
+
+// // Input component
+// const Input = ({ label, name, value, onChange, required }) => {
+//   return (
+//     <div className="sm:col-span-6">
+//       <label
+//         htmlFor={name}
+//         className="block text-sm font-medium leading-6 text-gray-900"
+//       >
+//         {label}
+//       </label>
+//       <div className="mt-2">
+//         <input
+//           type="text"
+//           name={name}
+//           id={name}
+//           required={required}
+//           value={value}
+//           onChange={onChange}
+//           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 required:"
+//         />
+//       </div>
+//     </div>
+//   );
+// };
+
+// // Select component
+// const Select = ({ label, name, value, onChange, options, required }) => {
+//   return (
+//     <div className="sm:col-span-6">
+//       <label
+//         htmlFor={name}
+//         className="block text-sm font-medium leading-6 text-gray-900"
+//       >
+//         {label}
+//       </label>
+//       <div className="mt-2">
+//         <select
+//           id={name}
+//           name={name}
+//           required={required}
+//           value={value}
+//           onChange={onChange}
+//           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+//         >
+//           <option value="">Select...</option>
+//           {options.map((option) => (
+//             <option key={option.value} value={option.value}>
+//               {option.label}
+//             </option>
+//           ))}
+//         </select>
+//       </div>
+//     </div>
+//   );
+// };
+
+// // Checkbox component
+// const Checkbox = ({ label, name, value, checked, onChange }) => {
+//   return (
+//     <label className="flex items-center mr-4 mb-2">
+//       <input
+//         type="checkbox"
+//         name={name}
+//         value={value}
+//         checked={checked}
+//         onChange={onChange}
+//         className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+//       />
+//       <span className="ml-2">{label}</span>
+//     </label>
+//   );
+// };
+
+// // Form component
+// const AddStudentForm = () => {
+//   const [formDetails, setFormDetails] = useState({
+//     fullName: "",
+//     classType: "",
+//     studentClass: "",
+//   });
+//   const [selectedArea, setSelectedArea] = useState("");
+//   const [selectedSubjects, setSelectedSubjects] = useState([]);
+
+//   const handleFormDetails = (e) => {
+//     setFormDetails((prevFormDetails) => ({
+//       ...prevFormDetails,
+//       [e.target.name]: e.target.value,
+//     }));
+//   };
+
+//   const handleAreaChange = (event) => {
+//     const area = event.target.value;
+//     setSelectedArea(area);
+//     setSelectedSubjects([]);
+//   };
+
+//   const handleSubjectChange = (event) => {
+//     const selectedSubject = event.target.value;
+//     const isChecked = event.target.checked;
+
+//     setSelectedSubjects((prevSelectedSubjects) => {
+//       if (isChecked) {
+//         return [...prevSelectedSubjects, selectedSubject];
+//       } else {
+//         return prevSelectedSubjects.filter(
+//           (subject) => subject !== selectedSubject
+//         );
+//       }
+//     });
+//   };
+
+//   const handleSubmit = async (event) => {
+//     event.preventDefault();
+//     // Your submission logic
+//   };
+
+//   return (
+//     <div className="addStudent_containe">
+//       <header className="bg-white shadow">
+//         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+//           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+//             Add New Student
+//           </h1>
+//         </div>
+//       </header>
+//       <main>
+//         <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+//           <div className="relative isolate px-6 lg:px-8">
+//             <Form onSubmit={handleSubmit}>
+//               <div className="w-full lg:w-2/3 mx-auto lg:p-20 space-y-12">
+//                 <Input
+//                   label="Full Name"
+//                   name="fullName"
+//                   value={formDetails.fullName}
+//                   onChange={handleFormDetails}
+//                   required
+//                 />
+//                 <Select
+//                   label="Class Section"
+//                   name="classType"
+//                   value={formDetails.classType}
+//                   onChange={handleFormDetails}
+//                   options={[
+//                     { value: "junior secondary", label: "Junior Secondary" },
+//                     { value: "senior secondary", label: "Senior Secondary" },
+//                   ]}
+//                   required
+//                 />
+//                 <Select
+//                   label="Class"
+//                   name="studentClass"
+//                   value={formDetails.studentClass}
+//                   onChange={handleFormDetails}
+//                   options={
+//                     formDetails.classType === "junior secondary"
+//                       ? [
+//                           { value: "JSS_1 Platinum", label: "JSS_1 Platinum" },
+//                           { value: "JSS_1 Rose", label: "JSS_1 Rose" },
+//                           // Add other junior secondary classes here
+//                         ]
+//                       : formDetails.classType === "senior secondary"
+//                       ? [
+//                           { value: "SS_1 Galaxy", label: "SS_1 Galaxy" },
+//                           { value: "SS_1 Platinum", label: "SS_1 Platinum" },
+//                           // Add other senior secondary classes here
+//                         ]
+//                       : []
+//                   }
+//                   required
+//                 />
+//                 <Select
+//                   label="Area"
+//                   name="area"
+//                   value={selectedArea}
+//                   onChange={handleAreaChange}
+//                   options={Object.keys(areasAndSubjects).map((area) => ({
+//                     value: area,
+//                     label: area,
+//                   }))}
+//                   required
+//                 />
+//                 {selectedArea && (
+//                   <div className="sm:col-span-6">
+//                     <label className="block text-sm font-medium leading-6 text-red-800">
+//                       Select Subjects for Student :
+//                     </label>
+//                     <div className="mt-2 flex flex-wrap">
+//                       {areasAndSubjects[selectedArea]?.map((subject) => (
+//                         <Checkbox
+//                           key={subject}
+//                           label={subject}
+//                           name={subject}
+//                           value={subject}
+//                           checked={selectedSubjects.includes(subject)}
+//                           onChange={handleSubjectChange}
+//                         />
+//                       ))}
+//                     </div>
+//                   </div>
+//                 )}
+//                 <div className="mt-6 flex items-center justify-end gap-x-6">
+//                   <button
+//                     type="submit"
+//                     className="w-full rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+//                   >
+//                     Submit
+//                   </button>
+//                 </div>
+//               </div>
+//             </Form>
+//           </div>
+//         </div>
+//       </main>
+//     </div>
+//   );
+// };
+
+// export default AddStudentForm;
+

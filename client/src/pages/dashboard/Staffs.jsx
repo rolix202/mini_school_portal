@@ -6,17 +6,6 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Modal from "../../components/Modal";
 import { toast } from "react-toastify";
 
-// export const loader = async () => {
-//   try {
-//     const data = await customFetch.get("/staff");
-//     return data;
-//   } catch (error) {
-//     handleServerError(error);
-//     return error;
-//   }
-// };
-
-
 const Staffs = () => {
   // const { data } = useLoaderData();
   const [staffData, setStaffData] = useState(null);
@@ -259,7 +248,7 @@ const Staffs = () => {
         <Modal
           open={openUpdate}
           onClose={() => setOpenUpdate(false)}
-          update={true}
+          formModal={true}
         >
           {staffs && (
             <div className="relative">

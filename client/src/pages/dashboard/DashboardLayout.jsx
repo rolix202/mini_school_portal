@@ -1,4 +1,4 @@
-import { Fragment, createContext, useEffect, useRef, useState } from "react";
+import { Fragment, createContext, useEffect, useState, useContext } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
@@ -15,123 +15,9 @@ import handleServerError from "../../../utils/handleServerError";
 import "animate.css";
 import rolandImg from "../../assets/roland.jpg";
 import logo from "../../assets/logo.png";
-import { useContext } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import Loader from "../../components/Loader";
+import { navigation } from "../../../utils/constants";
 
-// export const loader = async () => {
-//   try {
-//     const { data } = await customFetch.get("/current-user");
-//     // console.log(data);
-//     return data;
-//   } catch (error) {
-//     // handleServerError(error);
-//     return redirect("/login");
-//   }
-// };
-
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: false },
-  { name: "Staffs", href: "/dashboard/staffs", current: false },
-  {
-    name: "Students",
-    href: "/dashboard/students",
-    current: false,
-  },
-  {
-    name: "JSS Students",
-    href: "/dashboard/students",
-    current: false,
-    submenus: [
-      {
-        name: "JSS_1 Galaxy",
-        href: "/dashboard/students/jss/jss1-galaxy",
-        current: false,
-      },
-      {
-        name: "JSS_1 Platinum",
-        href: "/dashboard/students/jss/jss1-platinum",
-        current: false,
-      },
-      {
-        name: "JSS_1 Rose",
-        href: "/dashboard/students/jss/jss1-rose",
-        current: false,
-      },
-
-      {
-        name: "JSS_2 Galaxy",
-        href: "/dashboard/students/jss/jss2-galaxy",
-        current: false,
-      },
-      {
-        name: "JSS_2 Platinum",
-        href: "/dashboard/students/jss/jss2-platinum",
-        current: false,
-      },
-      {
-        name: "JSS_2 Rose",
-        href: "/dashboard/students/jss/jss2-rose",
-        current: false,
-      },
-
-      {
-        name: "JSS_3 Galaxy",
-        href: "/dashboard/students/jss/jss3-galaxy",
-        current: false,
-      },
-      {
-        name: "JSS_3 Rose",
-        href: "/dashboard/students/jss/jss3-rose",
-        current: false,
-      },
-    ],
-  },
-  {
-    name: "SSS Students",
-    href: "/dashboard/students",
-    current: false,
-    submenus: [
-      {
-        name: "SS_1 Galaxy",
-        href: "/dashboard/students/sss/ss1-galaxy",
-        current: false,
-      },
-      {
-        name: "SS_1 Platinum",
-        href: "/dashboard/students/sss/ss1-platinum",
-        current: false,
-      },
-
-      {
-        name: "SS_2 Galaxy",
-        href: "/dashboard/students/sss/ss2-galaxy",
-        current: false,
-      },
-      {
-        name: "SS_2 Platinum",
-        href: "/dashboard/students/sss/ss2-platinum",
-        current: false,
-      },
-
-      {
-        name: "SS_3 Galaxy",
-        href: "/dashboard/students/sss/ss3-galaxy",
-        current: false,
-      },
-      {
-        name: "SS_3 Platinum",
-        href: "/dashboard/students/sss/ss3-platinum",
-        current: false,
-      },
-    ],
-  },
-  { name: "Add Student", href: "/dashboard/add-student", current: false },
-  { name: "CAT 1", href: "#", current: false },
-  { name: "CAT 2", href: "#", current: false },
-  { name: "Remark", href: "#", current: false },
-  { name: "Result Sheet", href: "#", current: false },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -141,9 +27,6 @@ const DashboardContext = createContext();
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
-  // const { data } = useLoaderData();
-  // const { currentUser } = data;
-
   const { pathname } = useLocation();
   const [navigationItems, setNavigationItems] = useState(navigation);
   const [currentUser, setCurrentUser] = useState(null);
@@ -167,7 +50,6 @@ export default function DashboardLayout() {
         } catch (error) {
           navigate('/login')
         } 
-        
     }
 
     if (!currentUser){
@@ -185,8 +67,6 @@ export default function DashboardLayout() {
       handleServerError(error);
     }
   };
-
-
 
   const userNavigation = [
     { name: "Your Profile", href: "#" },

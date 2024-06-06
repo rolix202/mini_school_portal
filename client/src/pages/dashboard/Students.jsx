@@ -6,24 +6,13 @@ import { useDashboardContext } from "./DashboardLayout";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Example from "./testDropDown";
 
-// export const loader = async () => {
-//   try {
-//     const { data } = await customFetch.get("/student");
-//     console.log(data);
-//     return data;
-//   } catch (error) {
-//     handleServerError(error);
-//     return error;
-//   }
-// };
 
 const Students = () => {
   const { currentUser } = useDashboardContext()
  const currentUserClass = currentUser?.data?.currentUser.staffClass; 
   const [students, setStudents] = useState(null)
 
-  // const { data } = useLoaderData();
-  // const { students } = data;
+ 
 
   useEffect(() => {
     const getAllStudents = async () => {
@@ -39,26 +28,6 @@ const Students = () => {
   }, [])
 
 
-  // if(!students || students.length === 0){
-  //   return (
-  //     <div className="student_container">
-  //     <header className="bg-white shadow">
-  //       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-  //         <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-  //            Student List - (<span className="text-indigo-500">{" "} { currentUserClass } {" "} </span>)
-  //         </h1>
-  //       </div>
-  //     </header>
-  //     <main>
-  //       <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-  //         <p className="text-xl">No Student Record Found</p>
-  //       </div>
-  //     </main>
-  //   </div>
-  //   )
-  // }
-
-  // console.log(students);
 
   return (
     <div className="student_container">

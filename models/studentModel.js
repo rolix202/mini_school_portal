@@ -17,25 +17,26 @@ const studentSchema = new mongoose.Schema({
     studentClass: {
         type: String,
         required: [true, 'Choose student class'],
-        // enum: ['JSS_1 Platinum', 'JSS_1 Rose', 'JSS_1 Galaxy', 'JSS_2 Rose', 'JSS_2 Galaxy', 'JSS_3 Rose', 'JSS_3 Galaxy', 'SS_1 Platinum', 'SS_1 Galaxy', 'SS_2 Galaxy', 'SS_2 Platinum', 'SS_3 Galaxy', 'SS_3 Platinum']
+        
         enum: Object.values(STUDENT_CLASS)
     },
 
     subjectArea: {
         type: String,
         required: [true, 'Select student subject Area'],
-        enum: ['Sciences', 'Arts', 'Junior Classes']
+        enum: ['Sciences', 'Arts', 'Junior Subjects']
     },
 
     assignedSubjects: {
         type: [{
             type: String
         }],
+        required: true,
         validate: {
             validator: function (val) {
-                return val.length > 4
+                return val.length >= 5
             },
-            message: "Please assign at least five subject and above"
+            message: "Please assign at least five subject and above...!"
         }
     }
 })
