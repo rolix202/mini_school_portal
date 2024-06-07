@@ -1,17 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AssessmentHeader from "../../components/AssessmentHeader";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
 import customFetch from "../../../utils/customFetch";
 import handleServerError from "../../../utils/handleServerError";
 import { useDashboardContext } from "./DashboardLayout";
 import Loader from "../../components/Loader";
 import Modal from "../../components/Modal";
+import { toast } from "react-toastify";
 
 const AddAssessment = () => {
   const [students, setStudents] = useState(null);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
+  const [scores, setScores] = useState({});
+  const [scoreDetails, setScoreDetails] = useState({
+    category: "",
+    term: ""
+  })
 
   useEffect(() => {
     const getStudents = async () => {
@@ -28,13 +32,54 @@ const AddAssessment = () => {
     getStudents();
   }, []);
 
-  console.log(students);
-
   const { currentUser } = useDashboardContext();
 
   const academicDetails = {
     s_class: currentUser?.data?.currentUser?.staffClass,
     subject: currentUser?.data?.currentUser?.subject,
+  };
+
+  const handleScoreInput = (e) => {
+    const { name, value } = e.target
+    setScoreDetails((prev) => ({
+        ...prev,
+        [name]: value
+    }))
+  }
+
+  const handleScoreChange = (studentId, score) => {
+    if (/^\d*$/.test(score)) {
+      setScores((prevScores) => ({
+        ...prevScores,
+        [studentId]: score,
+      }));
+    }
+  };
+
+  const handleSubmitScores = async (e) => {
+    e.preventDefault();
+
+    for (let key in scores) {
+      let score = scores[key];
+      if (!/^\d+$/.test(score)) {
+        toast.error("All scores must be numbers");
+        return;
+      }
+
+      const assessmentInfo = {
+        score,
+        term: scoreDetails.term,
+        category: scoreDetails.category
+      }
+
+      try {
+        await customFetch.post(`/students/assessment/${key}`, assessmentInfo);
+        toast.success("Scores added successfully");
+      } catch (error) {
+        handleServerError(error);
+        return;
+      }
+    }
   };
 
   if (!isDataFetched) {
@@ -110,6 +155,8 @@ const AddAssessment = () => {
                   )
                   .join(" ");
 
+                  
+
                 return (
                   <tr key={index}>
                     <td className="px-6 py-2">{index + 1} </td>
@@ -150,6 +197,61 @@ const AddAssessment = () => {
               <h1 className="text-xl">Fill in the student Scores</h1>
             </div>
 
+            
+            <div className="flex flex-wrap -mx-3 mb-2">
+                <div className="w-1/2 px-3 mb-6 md:mb-4">
+                  <label
+                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    htmlFor="term"
+                  >
+                    Select Term
+                  </label>
+                  <div className="relative">
+                    <select
+                      className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 italic"
+                      name="term"
+                      id="term"
+                      value={scoreDetails.term}
+                      onChange={handleScoreInput}
+                      required
+                    >
+                      <option value="">Select term ...</option>
+                      <option value="1st Term">1st Term</option>
+                      <option value="2nd Term">2nd Term</option>
+                      <option value="3rd Term">3rd Term</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="w-1/2 px-3 mb-6 md:mb-4">
+                  <label
+                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    htmlFor="category"
+                  >
+                    Select Assessment type
+                  </label>
+                  <div className="relative">
+                    <select
+                      className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 italic"
+                      name="category"
+                      id="category"
+                      required
+                      value={scoreDetails.category}
+                      onChange={handleScoreInput}
+                    >
+                      <option value="">Select Assessment type ...</option>
+                      <option value="cat_1">First CAT</option>
+                      <option value="cat_2">Second CAT</option>
+                      <option value="cat_3">Third Cat</option>
+                      <option value="exam">Exam</option>
+                    </select>
+                  </div>
+
+        
+                </div>
+            </div>
+            
+
             <table className="w-5/6 m-auto text-center">
               <thead>
                 <tr>
@@ -173,15 +275,30 @@ const AddAssessment = () => {
                       <td>{index + 1} </td>
                       <td>{fname} </td>
                       <td className="">
-                        <form action="POST">
-                            <input type="text" name="score" className="w-full"/>
-                        </form>
+                        <input
+                          type="number"
+                          name="score"
+                          value={scores[student.studentID] || ""}
+                          required
+                          onChange={(e) =>
+                            handleScoreChange(student.studentID, e.target.value)
+                          }
+                          className="w-full"
+                        />
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={handleSubmitScores}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-5/6"
+              >
+                Submit Scores
+              </button>
+            </div>
           </div>
         </Modal>
       </div>
