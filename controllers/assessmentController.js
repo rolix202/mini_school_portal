@@ -101,6 +101,7 @@ export const getAssessmentsByClassTermCategory = asyncErrorHandler(async (req, r
         {
             $match: {
                 "studentDetails.studentClass": s_class,
+                
                 "term": term,
                 "assessments.category": category
             }

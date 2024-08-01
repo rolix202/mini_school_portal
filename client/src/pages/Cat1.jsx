@@ -211,7 +211,7 @@ const Cat1 = () => {
                     <td className="text-center">{scores.Geography || "-"}</td>
                     <td className="text-center">{scores.Agric || "-"}</td>
                     <td className="text-center">{scores.Government || "-"}</td>
-                    <td className="text-center">{scores["C. R. S"] || "-"}</td>
+                    <td className="text-center">{scores["C.R.S"] || "-"}</td>
                     <td className="text-center">{scores.Literature || "-"}</td>
                     <td className="text-center">{scores.Commerce || "-"}</td>
                     <td className="text-center">{scores["Technical Drawing"] || "-"}</td>

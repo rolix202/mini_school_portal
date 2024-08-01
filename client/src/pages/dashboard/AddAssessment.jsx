@@ -14,7 +14,8 @@ const AddAssessment = () => {
   const [scores, setScores] = useState({});
   const [scoreDetails, setScoreDetails] = useState({
     category: "",
-    term: ""
+    term: "",
+    subject: ""
   })
 
   useEffect(() => {
@@ -56,31 +57,42 @@ const AddAssessment = () => {
     }
   };
 
+
   const handleSubmitScores = async (e) => {
     e.preventDefault();
-
+   
     for (let key in scores) {
       let score = scores[key];
       if (!/^\d+$/.test(score)) {
         toast.error("All scores must be numbers");
         return;
       }
+    }
 
-      const assessmentInfo = {
-        score,
-        term: scoreDetails.term,
-        category: scoreDetails.category
-      }
+    const assessment = {
+      term: scoreDetails.term,
+      category: scoreDetails.category,
+      scores: Object.entries(scores).map(([studentId, score]) => ({
+        student: studentId,
+        subject: scoreDetails.subject,
+        score: Number(score)
+      }))
+    };
 
-      try {
-        await customFetch.post(`/students/assessment/${key}`, assessmentInfo);
-        toast.success("Scores added successfully");
-      } catch (error) {
-        handleServerError(error);
-        return;
+    try {
+      for (let studentId in scores) {
+        await customFetch.post(`/students/assessment/${studentId}`, {
+          term: assessment.term,
+          category: assessment.category,
+          scores: [{ subject: academicDetails.subject, score: scores[studentId] }]
+        });
       }
+      toast.success("Scores added successfully");
+    } catch (error) {
+      handleServerError(error);
     }
   };
+
 
   if (!isDataFetched) {
     return <Loader />;
